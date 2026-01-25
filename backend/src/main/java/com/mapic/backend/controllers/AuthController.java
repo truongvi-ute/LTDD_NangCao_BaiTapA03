@@ -1,8 +1,6 @@
 package com.mapic.backend.controllers;
 
-import com.mapic.backend.dtos.LoginRequest;
-import com.mapic.backend.dtos.RegisterRequest;
-import com.mapic.backend.entities.User;
+import com.mapic.backend.dtos.*;
 import com.mapic.backend.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,26 +10,88 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
+    
     @Autowired 
     private AuthService authService;
 
-    // Endpoint Đăng ký: POST http://localhost:8080/api/auth/register
+    // ĐĂNG KÝ VỚI OTP
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
-        String res = authService.register(req);
-        if (res.equals("Đăng ký thành công!")) {
-            return ResponseEntity.ok(res);
+        try {
+            String result = authService.register(req);
+            if (result.contains("thành công")) {
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.badRequest().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server: " + e.getMessage());
         }
-        return ResponseEntity.badRequest().body(res);
+    }
+    
+    // KÍCH HOẠT TÀI KHOẢN
+    @PostMapping("/activate")
+    public ResponseEntity<String> activateAccount(@RequestBody ActivateRequest req) {
+        try {
+            String result = authService.activateAccount(req);
+            if (result.contains("thành công")) {
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.badRequest().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server: " + e.getMessage());
+        }
+    }
+    
+    // RESEND ACTIVATION OTP
+    @PostMapping("/resend-activation")
+    public ResponseEntity<String> resendActivationOtp(@RequestBody EmailRequest req) {
+        try {
+            String result = authService.resendActivationOtp(req);
+            if (result.contains("gửi")) {
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.badRequest().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server: " + e.getMessage());
+        }
     }
 
-    // Endpoint Đăng nhập: POST http://localhost:8080/api/auth/login
+    // ĐĂNG NHẬP VỚI JWT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
-        User user = authService.login(req);
-        if (user != null) {
-            return ResponseEntity.ok(user); // Trả về JSON chứa toàn bộ info User
+        try {
+            LoginResponse response = authService.login(req);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage());
         }
-        return ResponseEntity.status(401).body("Sai email hoặc mật khẩu");
+    }
+    
+    // FORGOT PASSWORD
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody EmailRequest req) {
+        try {
+            String result = authService.forgotPassword(req);
+            if (result.contains("gửi")) {
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.badRequest().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server: " + e.getMessage());
+        }
+    }
+    
+    // RESET PASSWORD
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest req) {
+        try {
+            String result = authService.resetPassword(req);
+            if (result.contains("thành công")) {
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.badRequest().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi server: " + e.getMessage());
+        }
     }
 }
