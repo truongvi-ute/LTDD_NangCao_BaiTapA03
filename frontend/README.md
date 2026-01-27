@@ -1,50 +1,134 @@
-# Welcome to your Expo app 👋
+# Frontend - React Native Expo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📁 Cấu trúc thư mục
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+frontend/
+├── app/                    # Expo Router - Screens & Navigation
+│   ├── index.tsx          # Landing/Welcome screen
+│   ├── login.tsx          # Login screen
+│   ├── register.tsx       # Register screen
+│   ├── forgot-password.tsx # Forgot password screen
+│   ├── verify-otp.tsx     # OTP verification screen
+│   ├── home.tsx           # Home screen
+│   └── _layout.tsx        # Root layout
+├── assets/                # Static assets
+│   └── images/           # Images, icons
+├── components/           # Reusable UI components
+│   ├── ui/              # Base UI components
+│   └── *.tsx            # Feature components
+├── constants/           # App constants
+│   ├── api.js          # API constants
+│   └── theme.ts        # Theme constants
+├── hooks/              # Custom React hooks
+├── services/           # Business logic & API calls
+│   ├── api/           # API client & endpoints
+│   ├── auth/          # Authentication services
+│   └── storage/       # Storage services
+├── store/             # State management (Zustand)
+│   ├── authStore.ts   # Authentication state
+│   └── userStore.ts   # User profile state
+├── types/             # TypeScript type definitions
+│   ├── navigation.ts  # Navigation types
+│   └── common.ts      # Common types
+└── utils/             # Utility functions
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🏗️ Kiến trúc
 
-## Learn more
+### Hybrid Architecture
+- **Expo Router**: File-based routing (modern approach)
+- **Zustand**: State management (lightweight alternative to Redux)
+- **Services Layer**: API calls và business logic
+- **Component-based**: Reusable UI components
 
-To learn more about developing your project with Expo, look at the following resources:
+### Tech Stack
+- **Framework**: Expo + React Native
+- **Navigation**: Expo Router
+- **State Management**: Zustand
+- **HTTP Client**: Axios
+- **Storage**: Expo SecureStore + AsyncStorage
+- **TypeScript**: Full type safety
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🚀 Cách sử dụng
 
-## Join the community
+### Services
+```typescript
+// Authentication
+import { authService } from '@/services/auth';
+await authService.login({ email, password });
 
-Join our community of developers creating universal apps.
+// API calls
+import { apiClient } from '@/services/api';
+const data = await apiClient.get('/endpoint');
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### State Management
+```typescript
+// Auth store
+import { useAuthStore } from '@/store/authStore';
+const { user, login, logout } = useAuthStore();
+
+// User store
+import { useUserStore } from '@/store/userStore';
+const { profile, fetchProfile } = useUserStore();
+```
+
+### Navigation
+```typescript
+// Expo Router navigation
+import { router } from 'expo-router';
+router.push('/login');
+router.replace('/home');
+```
+
+## 📦 Dependencies
+
+### Core
+- `expo-router`: File-based navigation
+- `zustand`: State management
+- `axios`: HTTP client
+- `expo-secure-store`: Secure token storage
+- `@react-native-async-storage/async-storage`: Local storage
+
+### Development
+- `typescript`: Type safety
+- `eslint`: Code linting
+
+## 🔧 Configuration
+
+### Environment Variables
+Create `.env` file:
+```
+EXPO_PUBLIC_API_URL=http://localhost:8080/api
+```
+
+### API Configuration
+Update `services/api/client.ts` for your backend URL and authentication flow.
+
+## 📱 Screens
+
+- **index.tsx**: Landing/Welcome screen
+- **login.tsx**: User authentication
+- **register.tsx**: User registration
+- **forgot-password.tsx**: Password recovery
+- **verify-otp.tsx**: OTP verification
+- **home.tsx**: Main app screen
+
+## 🎯 Best Practices
+
+1. **Services**: Tách biệt API logic khỏi UI components
+2. **State Management**: Sử dụng Zustand stores cho global state
+3. **Types**: Định nghĩa TypeScript types cho type safety
+4. **Error Handling**: Centralized error handling trong API client
+5. **Security**: Sử dụng SecureStore cho sensitive data
+
+## 🔄 Migration Notes
+
+Cấu trúc này kết hợp:
+- ✅ **Expo Router** (modern, file-based routing)
+- ✅ **Services layer** (API & business logic)
+- ✅ **State management** (Zustand)
+- ✅ **Type safety** (TypeScript)
+
+Đây là cấu trúc hybrid tối ưu cho React Native apps hiện đại.
