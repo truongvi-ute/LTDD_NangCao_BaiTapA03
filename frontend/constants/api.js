@@ -2,7 +2,7 @@ import axios from "axios";
 import { TokenManager } from "../utils/tokenManager";
 
 const api = axios.create({
-  baseURL: "http://172.16.30.156:8080/api", // Thay bằng IP máy tính của bạn
+  baseURL: "http://192.168.100.177:8080/api", // Thay bằng IP máy tính của bạn
   timeout: 10000,
 });
 
