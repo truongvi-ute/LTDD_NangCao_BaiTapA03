@@ -24,6 +24,7 @@ frontend/
 ├── services/           # Business logic & API calls
 │   ├── api/           # API client & endpoints
 │   ├── auth/          # Authentication services
+│   ├── user/          # User data management
 │   └── storage/       # Storage services
 ├── store/             # State management (Zustand)
 │   ├── authStore.ts   # Authentication state
@@ -48,6 +49,7 @@ frontend/
 - **State Management**: Zustand
 - **HTTP Client**: Axios
 - **Storage**: Expo SecureStore + AsyncStorage
+- **Styling**: NativeWind (Tailwind CSS for React Native)
 - **TypeScript**: Full type safety
 
 ## 🚀 Cách sử dụng
@@ -61,6 +63,11 @@ await authService.login({ email, password });
 // API calls
 import { apiClient } from '@/services/api';
 const data = await apiClient.get('/endpoint');
+
+// User Data Management
+import { UserService } from '@/services/user';
+const user = await UserService.getUser();
+await UserService.saveUser(userData);
 ```
 
 ### State Management
@@ -94,6 +101,8 @@ router.replace('/home');
 ### Development
 - `typescript`: Type safety
 - `eslint`: Code linting
+- `nativewind`: Tailwind CSS for React Native
+- `tailwindcss`: Utility-first CSS framework
 
 ## 🔧 Configuration
 
@@ -122,6 +131,21 @@ Update `services/api/client.ts` for your backend URL and authentication flow.
 3. **Types**: Định nghĩa TypeScript types cho type safety
 4. **Error Handling**: Centralized error handling trong API client
 5. **Security**: Sử dụng SecureStore cho sensitive data
+6. **Styling**: Sử dụng NativeWind (Tailwind CSS) cho consistent UI
+
+## 🎨 Styling với NativeWind
+
+```tsx
+// Tailwind classes
+<View className="flex-1 bg-white p-4">
+  <Text className="text-lg font-bold text-gray-900">Hello</Text>
+  <TouchableOpacity className="bg-primary-500 rounded-lg p-3">
+    <Text className="text-white">Button</Text>
+  </TouchableOpacity>
+</View>
+```
+
+Xem thêm: [TAILWIND_SETUP.md](./TAILWIND_SETUP.md)
 
 ## 🔄 Migration Notes
 

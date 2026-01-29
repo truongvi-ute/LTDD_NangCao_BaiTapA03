@@ -2,6 +2,7 @@ import { apiClient } from '../api/client';
 import { API_ENDPOINTS } from '../api/endpoints';
 import { LoginRequest, RegisterRequest, AuthResponse } from '../api/types';
 import { setToken, removeToken } from './tokenService';
+import { UserService } from '../user/userService';
 
 class AuthService {
   async login(credentials: LoginRequest): Promise<AuthResponse> {
@@ -13,6 +14,9 @@ class AuthService {
       
       // Store token after successful login
       await setToken(response.token);
+      
+      // Save user data to AsyncStorage
+      await UserService.saveUser(response.user);
       
       return response;
     } catch (error) {
@@ -30,6 +34,9 @@ class AuthService {
       // Store token after successful registration
       await setToken(response.token);
       
+      // Save user data to AsyncStorage
+      await UserService.saveUser(response.user);
+      
       return response;
     } catch (error) {
       throw error;
@@ -43,7 +50,9 @@ class AuthService {
       // Continue with logout even if API call fails
       console.warn('Logout API call failed:', error);
     } finally {
-      // Always remove token from storage
+      // Clear user data from AsyncStorage
+      await UserService.clearUser();
+      // Remove token from storage
       await removeToken();
     }
   }

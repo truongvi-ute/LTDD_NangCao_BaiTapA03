@@ -10,10 +10,9 @@ import {
   Platform,
 } from "react-native";
 import { router } from "expo-router";
-import api from "../constants/api";
-import { TokenManager } from "../utils/tokenManager";
+import { authService } from "@/services/auth";
 
-const LoginScreen = () => {
+export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,16 +25,11 @@ const LoginScreen = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/auth/login", { email, password });
+      const response = await authService.login({ email, password });
       
-      // Backend trả về JWT token và user info
-      const { token, user } = response.data;
+      const userName = response.user.firstName || response.user.email;
       
-      // Lưu JWT token và user info
-      await TokenManager.saveToken(token);
-      await TokenManager.saveUser(user);
-      
-      Alert.alert("Thành công", `Chào mừng ${user.fullName} trở lại!`, [
+      Alert.alert("Thành công", `Chào mừng ${userName} trở lại!`, [
         {
           text: "OK",
           onPress: () => router.replace("/home")
@@ -45,12 +39,8 @@ const LoginScreen = () => {
       console.log("Login error:", error);
       let errorMessage = "Sai email hoặc mật khẩu";
       
-      if (error.response?.data) {
-        if (typeof error.response.data === 'string') {
-          errorMessage = error.response.data;
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
-        }
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -170,5 +160,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
   },
 });
-
-export default LoginScreen;

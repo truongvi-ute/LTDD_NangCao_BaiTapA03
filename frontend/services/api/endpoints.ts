@@ -18,5 +18,11 @@ export const API_ENDPOINTS = {
     CHANGE_PASSWORD: '/user/change-password',
   },
   
+  // Upload endpoints
+  UPLOAD: {
+    IMAGE: '/upload/image',
+    AVATAR: '/upload/avatar',
+  },
+  
   // Add more endpoints as needed
 } as const;
